@@ -1,0 +1,43 @@
+name: 森空岛每日签到
+
+on:
+  # 定时运行
+  schedule:
+    - cron: '0 23 * * *'
+  # 允许手动触发
+  workflow_dispatch:
+
+jobs:
+  sign-in:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Generate Config File
+        # 将Secrets注入环境变量
+        env:
+          USER1_TOKEN: ${{ secrets.SKLAND_TOKEN }}
+        run: |
+          cat <<EOF > config.yaml
+          log_level: "info"
+          qmsg_key: "$QMSG_KEY"
+          users:
+            - nickname: "Thisisseanxu"
+              token: "$USER1_TOKEN"
+          EOF
+          
+          echo "配置文件已生成"
+
+      - name: Run Sign-in Script
+        run: python main.py
