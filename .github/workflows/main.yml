@@ -29,13 +29,16 @@ jobs:
         # 将Secrets注入环境变量
         env:
           USER1_TOKEN: ${{ secrets.SKLAND_TOKEN }}
+          USER2_TOKEN: ${{ secrets.SKLAND_TOKEN_2 }}
         run: |
           cat <<EOF > config.yaml
           log_level: "info"
           qmsg_key: "$QMSG_KEY"
           users:
-            - nickname: "Thisisseanxu"
+            - nickname: "User1"
               token: "$USER1_TOKEN"
+            - nickname: "User2"
+              token: "$USER2_TOKEN"
           EOF
           
           echo "配置文件已生成"
